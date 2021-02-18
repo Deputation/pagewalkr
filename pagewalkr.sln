@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pagewalkr", "pagewalkr\pagewalkr.vcxproj", "{9AE7EDEC-3F9F-48C8-9221-FC3FC8CF9CEC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AE7EDEC-3F9F-48C8-9221-FC3FC8CF9CEC}.Debug|x64.ActiveCfg = Debug|x64
+		{9AE7EDEC-3F9F-48C8-9221-FC3FC8CF9CEC}.Debug|x64.Build.0 = Debug|x64
+		{9AE7EDEC-3F9F-48C8-9221-FC3FC8CF9CEC}.Debug|x64.Deploy.0 = Debug|x64
+		{9AE7EDEC-3F9F-48C8-9221-FC3FC8CF9CEC}.Release|x64.ActiveCfg = Release|x64
+		{9AE7EDEC-3F9F-48C8-9221-FC3FC8CF9CEC}.Release|x64.Build.0 = Release|x64
+		{9AE7EDEC-3F9F-48C8-9221-FC3FC8CF9CEC}.Release|x64.Deploy.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2DD473E3-5004-4D58-B4C1-36439BBAF84B}
+	EndGlobalSection
+EndGlobal
