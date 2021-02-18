@@ -10,7 +10,7 @@ This is just a proof of concept. It provides no real way to communicate to userm
 MmMapIoSpace isn't used while MmGetVirtualForPhysical is used instead because of a patch put in by microsoft that makes it no longer possible to map page tables with MmMapIoSpace as an exploit mitigation. You can't map page tables anymore by DESIGN, you can't therefore just patch away microsoft's "patch" to the function, as far as my understanding goes. However, it's not hard to replicate the inner workings of MmMapIoSpace. Replacing a page's PTE and using ``__invlpg`` on the page address you previously mapped this way should be more than enough to "emulate" its (old) inner workings. Of course, to be able to run this in your system, you'll need to have test signing enabled, otherwise you won't be able to run the driver without digitally signing it. To enable test mode, simply run ``bcdedit /set TESTSIGNING ON`` on an elevated command prompt and reboot the system.
 
 ## But how does this work?
-Thorough documentation is not available at this time due to this being such a small project, albeit about such a complicated topic to explain in a few comments. Comments are certainly included in the page table iteration code, but those comments are written for someone who has at least given a reading to the paging section of the Intel SDM, or already has a vague idea of what should be done to iterate over those pages, the 4 level page table hierarchy is not a system that should ideally be explained in a cpp project with comments. This project simply illustrates what needs done, and doesn't take care of paged out addresses.
+Thorough documentation is not available at this time due to this being such a small project albeit treating such a complicated topic to explain in a few comments. Comments are certainly included in the page table iteration code to explain what's going on, but those comments are written for someone who has at least given a reading to the paging section of the Intel SDM, or already has a vague idea of what should be done to iterate over those pages, the 4 level page table hierarchy is not a system that should ideally be explained in a cpp project with comments. This project simply illustrates what needs done, and doesn't take care of paged out addresses.
 
 ## Example
 A small example is contained in the repository which simply runs the find_pattern function (a function well known to reverse engineers and beginner hackers alike) that is meant to find a byte pattern in a given range of addresses described by a start address and a size. The scan will start at the "start" address and end at "start + size". The example scans for a common function prologue:
@@ -23,5 +23,7 @@ once the pattern is found, it will print this to the kernel debugger, and you'll
 - Install VS2019
 - Install the WDK (Windows driver kit) + the WDK extension for VS2019
 - Build as-is, release and debug mode in x64 should both be compiling out of the box.
+
+## How to use
 - Open a CMD prompt as admin, run "``sc create pagewalkr type= kernel binPath= "C:\path\to\the\file\you\just\built.sys"``".
 - Open a CMD prompt as admin, run "``sc start pagewalkr``, and look at the kernel debugger to see the results.
