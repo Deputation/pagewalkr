@@ -19,6 +19,7 @@ void thread_start(void* context)
 	// PAGE_SIZE. With a page frame number, we're treating physical memory as an array composed by members (pages) each 4kb
 	// (4096 or 0x1000) bytes big to work with. Simply multiplying by 0x1000 would work as well. Here we're simply using the
 	// page frame number in the cr3 register to find the base of the PML4 page table in the 4-level paging structure.
+	// To scan other processes in the system as well, you should grab their cr3 and walk their paging tables in a similar way.
 	PHYSICAL_ADDRESS phys_buffer;
 	phys_buffer.QuadPart = kernel_cr3.address_of_page_directory << PAGE_SHIFT;
 
@@ -48,7 +49,7 @@ void thread_start(void* context)
 		// Now we will get the pdpt entries this pml4 maps.
 		pdpte_64* pdpt = reinterpret_cast<pdpte_64*>(MmGetVirtualForPhysical(phys_buffer));
 
-		if (!MmIsAddressValid(pdpt) || !pdpt)
+		if (!utils::is_valid(pdpt))
 		{
 			// Invalid pdpt table ptr
 			continue;
@@ -69,7 +70,7 @@ void thread_start(void* context)
 			{
 				pde_64* pde = reinterpret_cast<pde_64*>(MmGetVirtualForPhysical(phys_buffer));
 
-				if (!MmIsAddressValid(pde) || !pde)
+				if (!utils::is_valid(pde))
 				{
 					// Table ptr invalid.
 					continue;
@@ -84,7 +85,7 @@ void thread_start(void* context)
 			// Keep on enumerating the pdpt table.
 			pde_64* pde = reinterpret_cast<pde_64*>(MmGetVirtualForPhysical(phys_buffer));
 
-			if (!pde || !MmIsAddressValid(pde))
+			if (!utils::is_valid(pde))
 			{
 				// Table ptr invalid.
 				continue;
@@ -105,7 +106,7 @@ void thread_start(void* context)
 				{
 					pte_64* pte = reinterpret_cast<pte_64*>(MmGetVirtualForPhysical(phys_buffer));
 
-					if (!MmIsAddressValid(pte) || !pte)
+					if (!utils::is_valid(pte))
 					{
 						// Invalid table ptr.
 						continue;
@@ -119,7 +120,7 @@ void thread_start(void* context)
 
 				pte_64* pte = reinterpret_cast<pte_64*>(MmGetVirtualForPhysical(phys_buffer));
 
-				if (!MmIsAddressValid(pte) || !pte)
+				if (!utils::is_valid(pte))
 				{
 					// Invalid table ptr.
 					continue;
@@ -137,7 +138,7 @@ void thread_start(void* context)
 
 					pte_64* individual_pte = reinterpret_cast<pte_64*>(MmGetVirtualForPhysical(phys_buffer));
 
-					if (utils::is_address_in_mtrrs(phys_buffer) && individual_pte && MmIsAddressValid(individual_pte))
+					if (utils::is_address_in_mtrrs(phys_buffer) && utils::is_valid(individual_pte))
 					{
 						auto four_kb_page = MmGetVirtualForPhysical(phys_buffer);
 

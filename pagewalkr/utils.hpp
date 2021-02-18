@@ -7,6 +7,7 @@ namespace utils
 
 	void get_mtrrs();
 	bool is_address_in_mtrrs(PHYSICAL_ADDRESS address);
+	bool is_valid(void* ptr);
 
 	namespace pdpt
 	{
@@ -24,4 +25,6 @@ namespace utils
 	{
 		void scan_pte(void* page_base, size_t size, PHYSICAL_ADDRESS physical_address, pte_64* entry);
 	}
+
+	void page_scan_callback(void* page_base, size_t size, PHYSICAL_ADDRESS physical_address);
 }

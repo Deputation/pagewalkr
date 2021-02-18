@@ -33,6 +33,11 @@ bool utils::is_address_in_mtrrs(PHYSICAL_ADDRESS address)
 	return false;
 }
 
+bool utils::is_valid(void* ptr)
+{
+	return ptr && MmIsAddressValid(ptr);
+}
+
 void utils::pdpt::large_1_gb_pdpt_callback(PHYSICAL_ADDRESS physical_address, pde_64* entry)
 {
 	log("[%p] 1 gb pdpt large page found!\n", entry);
@@ -48,10 +53,10 @@ void utils::pdpt::scan_pdpt(void* page_base, size_t size, PHYSICAL_ADDRESS physi
 {
 	if (!page_base)
 	{
-		if (KD_DEBUGGER_ENABLED) __debugbreak();
+		kd_break;
 	}
 
-	log_critical("[%p] 4kb chunk of 1 gb pdpt page chunk found!\n", page_base);
+	utils::page_scan_callback(page_base, size, physical_address);
 }
 
 void utils::pde::large_2_mb_pde_callback(PHYSICAL_ADDRESS physical_address, pte_64* entry)
@@ -69,18 +74,31 @@ void utils::pde::scan_pde(void* page_base, size_t size, PHYSICAL_ADDRESS physica
 {
 	if (!page_base)
 	{
-		if (KD_DEBUGGER_ENABLED) __debugbreak();
+		kd_break;
 	}
 
-	log_critical("[%p] 4kb chunk of 2 mb pde page chunk found!\n", page_base)
+	utils::page_scan_callback(page_base, size, physical_address);
 }
 
 void utils::pte::scan_pte(void* page_base, size_t size, PHYSICAL_ADDRESS physical_address, pte_64* entry)
 {
 	if (!page_base)
 	{
-		if (KD_DEBUGGER_ENABLED) __debugbreak();
+		kd_break;
 	}
 
-	log_critical("[%p] 4 kb pte backed page found!\n", page_base);
+	utils::page_scan_callback(page_base, size, physical_address);
+}
+
+void utils::page_scan_callback(void* page_base, size_t size, PHYSICAL_ADDRESS physical_address)
+{
+	// Let's say we want to find every single occurrence of this pattern in the kernel.
+	// This example is just a simple fn prologue.
+	// example -> mov     qword ptr [rsp+8],rbx
+	auto example = scan::find_pattern<uint64_t>("\x48\x89\x5C\x24\x08", "xxxxx", page_base, size);
+
+	if (example)
+	{
+		log_info("[%p] found example pattern at %p\n", page_base, example)
+	}
 }
