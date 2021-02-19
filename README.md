@@ -26,4 +26,4 @@ once the pattern is found, it will print this to the kernel debugger, and you'll
 
 ## How to use
 - Open a CMD prompt as admin, run "``sc create pagewalkr type= kernel binPath= "C:\path\to\the\file\you\just\built.sys"``".
-- Open a CMD prompt as admin, run "``sc start pagewalkr``, and look at the kernel debugger to see the results.
+- Open a CMD prompt as admin, run "``sc start pagewalkr``", and look at the kernel debugger to see the results.
