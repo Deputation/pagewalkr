@@ -19,16 +19,18 @@ A small example is contained in the repository which simply runs the find_patter
 
 once the first occurrence of the pattern is found, it will print its finding to the kernel debugger, and you'll be able to verify for yourself that the pattern is, indeed, there with ``uf <address>``.
 
-This example only scans memory that is outside the regular module allocated memory in the kernel, and it can be used to track down mapped payloads inside the kernel. Ideally, you'd want find_pattern to scan for **all** occurences of the pattern outside module memory. I didn't implement such a feature because i found the performance to be severely degraded by it, and if a pattern appears even just once in a page, that means you can dump the entire page to disk and analyze it, no need to scan for all occurences of patterns since the scan works page by page (even large pages are split in 4k (0x1000) bytes "chunks" to scan).
+This example only scans memory that is outside the regular module allocated memory in the kernel, and it can be used to track down mapped payloads inside the kernel. Ideally, you'd want find_pattern to scan for **all** occurences of the pattern outside module memory. I didn't implement such a feature because I found the performance to be severely degraded by it, and if a pattern appears even just once in a page, that means you can dump the entire page to disk and analyze it, no need to scan for all occurences of patterns since the scan works page by page (even large pages are split in 4k (0x1000) bytes "chunks" to scan).
 
 ## Verify the findings
-I was looking through internet communities to see if someone actually figured out how to check if an address resides in module memory or not, and i stumbled upon this on OSR:
+I was looking through some internet communities to see if someone actually figured out how to check if an address resides in module memory or not, and I stumbled upon this on OSR:
 
 https://community.osr.com/discussion/55379/how-to-easily-determine-module-offset-into-for-a-given-address
 
 The user (Administrator at the time of writing) ``Scott_Noone_`` posted a simple WinDbg command that, given an address, will print the module it resides in and its offset. I've edited the command so that it will tell us whether or not the address resides in module memory.
 
 ``!for_each_module j <insert address here> > @#Base & <insert address here> < @#End '.echo The address resides in module memory'``
+
+This is the command I also used to verify whether or not my code was working as intended or not (other than simply disassembling the address and looking at the pages found in a hex editor), so if you find a bug in it, please let me know!
 
 ## Getting started
 - Install VS2019
