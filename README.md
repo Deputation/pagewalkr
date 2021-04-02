@@ -13,7 +13,7 @@ MmMapIoSpace isn't used while MmGetVirtualForPhysical is used instead because of
 Thorough documentation is not available at this time due to this being such a small project albeit treating such a complicated topic to explain in a few comments. Comments are certainly included in the page table iteration code to explain what's going on, but those comments are written for someone who has at least given a reading to the paging section of the Intel SDM, or already has a vague idea of what should be done to iterate over those pages, the 4 level page table hierarchy is not a system that should ideally be explained in a cpp project in a few comments. This project simply illustrates what needs done, and doesn't take care of paged out addresses.
 
 ## Example (Mapped memory scanner)
-A small example is contained in the repository which simply runs the find_pattern function: a function that is meant to find the occurrences of a certain byte pattern in memory. The scan will start at the "start" address and end at "start + size". The example scans for a common function prologue:
+A small example is contained in the repository which simply runs the find_pattern function: a function that is meant to find the first occurrence of a certain byte pattern in memory. The scan will start at the "start" address and end at "start + size". The example scans for a common function prologue:
 
 ``48 89 5C 24 08    mov qword ptr [rsp+8], rbx``
 
