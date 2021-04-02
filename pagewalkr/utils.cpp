@@ -92,13 +92,21 @@ void utils::pte::scan_pte(void* page_base, size_t size, PHYSICAL_ADDRESS physica
 
 void utils::page_scan_callback(void* page_base, size_t size, PHYSICAL_ADDRESS physical_address)
 {
-	// Let's say we want to find every single occurrence of this pattern in the kernel.
-	// This example is just a simple fn prologue.
-	// example -> mov     qword ptr [rsp+8],rbx
-	auto example = scan::find_pattern<uint64_t>("\x48\x89\x5C\x24\x08", "xxxxx", page_base, size);
+	// More common fn prologues and epilogues could be added to increase the detection rate. This 
+	// method is far from perfect, but it can help while trying to manually analyze mapped payloads
+	// in kernel space.
+	// 
+	// prologue -> mov     qword ptr [rsp+8],rbx
 
-	if (example)
+	// If the address we've been given does not pertain to the address range
+	// of any kernel driver currently loaded...
+	if (!scan::is_in_module_range(page_base))
 	{
-		log_info("[%p] found example pattern at %p\n", page_base, example)
+		auto prologue = scan::find_pattern<uint64_t>("\x48\x89\x5C\x24\x08", "xxxxx", page_base, size);
+
+		if (prologue)
+		{
+			log_info("[page @%p] found a function prologue in non-module memory @%p\n", page_base, prologue)
+		}
 	}
 }

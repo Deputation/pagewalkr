@@ -35,4 +35,6 @@ namespace scan
 
 		return (t)(nullptr);
 	}
+
+	bool is_in_module_range(void* address);
 }

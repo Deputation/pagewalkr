@@ -8,5 +8,6 @@
 #define log_info(...) DbgPrintEx(0, 0, __VA_ARGS__);
 #define kd_break if (KD_DEBUGGER_ENABLED) __debugbreak();
 
+#include "imports.hpp"
 #include "scanner.hpp"
 #include "utils.hpp"

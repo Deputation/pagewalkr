@@ -44,7 +44,7 @@ void thread_start(void* context)
 			continue;
 		}
 
-		log("pml4 present at %p\n", phys_buffer.QuadPart);
+		log("pml4 present @%p\n", phys_buffer.QuadPart);
 
 		// Now we will get the pdpt entries this pml4 maps.
 		pdpte_64* pdpt = reinterpret_cast<pdpte_64*>(MmGetVirtualForPhysical(phys_buffer));

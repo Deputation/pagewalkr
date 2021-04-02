@@ -47,5 +47,8 @@
     <ClInclude Include="scanner.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="imports.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
